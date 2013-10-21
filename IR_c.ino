@@ -1,10 +1,12 @@
 #include <Servo.h>
+#include <JeeLib.h> // Low power functions library
 
 Servo servo;
 int servoValue;
 int maxServo;
 int minServo;
-// the setup routine runs once when you press reset:
+ISR(WDT_vect) { Sleepy::watchdogEvent(); } // Setup the watchdog
+
 void setup() {                   
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
@@ -31,8 +33,9 @@ void loop() {
       servo.write(servoValue);
       Serial.println(servoValue);
     }
-    delay(1000);
+    Sleepy::loseSomeTime(1000);
+  } else {
+    Sleepy::loseSomeTime(5000);
   }
-  delay(20);
 
 }
